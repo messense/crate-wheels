@@ -1,10 +1,10 @@
-# crate-wheels
+# 📦 crate-wheels 🎡
 
 A repository to build Python wheels for some Rust crates on GitHub Actions.
 
 ## crates
 
-| crate            | pypi                                                                                                 | how to install               |
+| 📦 crate          | 🎡 pypi                                                                                               | 🛠️ how to install             |
 | ---------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------- |
 | [cargo-insta]    | [![PyPI](https://img.shields.io/pypi/v/cargo-insta.svg)](https://pypi.org/project/cargo-insta)       | `pip install cargo-insta`    |
 | [sccache]        | [![PyPI](https://img.shields.io/pypi/v/sccache.svg)](https://pypi.org/project/sccache)               | `pip install sccache`        |
