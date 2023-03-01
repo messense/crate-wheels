@@ -44,6 +44,9 @@ jobs:
           - os: windows-latest
             target: x86_64
             features: reqwest/native-tls-vendored
+          - os: windows-latest
+            target: i686
+            features: reqwest/native-tls-vendored
     steps:
       - uses: actions/checkout@v3
         with:
@@ -57,6 +60,7 @@ jobs:
           target: ${{ matrix.platform.target }}
           manylinux: auto
           args: --release -o dist --features ${{ matrix.platform.features }}
+          sccache: 'true'
       - name: Upload wheel artifacts
         uses: actions/upload-artifact@v3
         with:
