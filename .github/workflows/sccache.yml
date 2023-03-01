@@ -40,20 +40,13 @@ jobs:
           repository: mozilla/sccache
           ref: v0.4.0-pre.8
           path: sccache
-      - shell: bash
-        run: |
-          echo "
-          [patch.crates-io]
-          blake3 = { git = \"https://github.com/messense/BLAKE3.git\", branch = \"aarch64-hard-float\" }
-          " >> sccache/Cargo.toml
-          cat sccache/Cargo.toml
       - uses: dtolnay/rust-toolchain@stable
       - uses: PyO3/maturin-action@v1
         with:
           working-directory: sccache
           target: ${{ matrix.platform.target }}
           manylinux: auto
-          args: --release -o dist --features ${{ matrix.platform.features }}
+          args: --release -o dist --features ${{ matrix.platform.features }} -vv
           sccache: 'true'
       - name: Upload wheel artifacts
         uses: actions/upload-artifact@v3
