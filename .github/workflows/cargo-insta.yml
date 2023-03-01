@@ -37,6 +37,8 @@ jobs:
             target: aarch64
           - os: windows-latest
             target: x86_64
+          - os: windows-latest
+            target: i686
     steps:
       - uses: actions/checkout@v3
         with:
@@ -50,6 +52,7 @@ jobs:
           target: ${{ matrix.platform.target }}
           manylinux: auto
           args: -b bin --release -o dist
+          sccache: 'true'
       - name: Upload wheel artifacts
         uses: actions/upload-artifact@v3
         with:

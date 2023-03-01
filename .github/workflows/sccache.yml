@@ -44,6 +44,9 @@ jobs:
           - os: windows-latest
             target: x86_64
             features: reqwest/native-tls-vendored
+          - os: windows-latest
+            target: i686
+            features: reqwest/native-tls-vendored
     steps:
       - uses: actions/checkout@v3
         with:
