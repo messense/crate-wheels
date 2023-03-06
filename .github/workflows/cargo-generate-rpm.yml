@@ -1,0 +1,99 @@
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'cargo-generate-rpm-*'
+    paths:
+      - .github/workflows/cargo-generate-rpm.yml
+  pull_request:
+    paths:
+      - .github/workflows/cargo-generate-rpm.yml
+  workflow_dispatch:
+
+name: cargo-generate-rpm
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build on ${{ matrix.platform.os }} for ${{ matrix.platform.target }}
+    runs-on: ${{ matrix.platform.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - os: ubuntu-latest
+            target: x86_64
+          - os: ubuntu-latest
+            target: i686
+          - os: ubuntu-latest
+            target: aarch64
+          - os: macos-latest
+            target: x86_64
+          - os: macos-latest
+            target: aarch64
+          - os: windows-latest
+            target: x86_64
+          - os: windows-latest
+            target: i686
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: cat-in-136/cargo-generate-rpm
+          ref: 'v0.10.1'
+          path: cargo-generate-rpm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: PyO3/maturin-action@v1
+        with:
+          working-directory: cargo-generate-rpm
+          target: ${{ matrix.platform.target }}
+          manylinux: auto
+          args: -b bin --release -o dist
+          sccache: 'true'
+      - name: Upload wheel artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: cargo-generate-rpm/dist
+
+  release-pypi:
+    permissions:
+      # Used to sign the release's artifacts with sigstore-python.
+      id-token: write
+      # Used to upload release artifacts.
+      contents: write
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    if: "startsWith(github.ref, 'refs/tags/')"
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: wheels
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Publish
+        env:
+          MATURIN_PASSWORD: ${{ secrets.MATURIN_PASSWORD }}
+        run: |
+          set -ex
+          pip install maturin
+          maturin upload -u __token__ --skip-existing *
+      - name: Sigstore Sign
+        uses: sigstore/gh-action-sigstore-python@v0.0.11
+        with:
+          inputs: ./*.whl
+          upload-signing-artifacts: true
+      - name: Release signing artifacts
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            *.whl
+            *.sig
+            *.crt
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
+          generate_release_notes: true
