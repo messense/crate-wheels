@@ -45,6 +45,13 @@ jobs:
           repository: cat-in-136/cargo-generate-rpm
           ref: 'v0.10.1'
           path: cargo-generate-rpm
+      - if: ${{ matrix.platform.os == 'macos-latest' }}
+        run: |
+          brew install gnu-sed
+          gsed -i '4d' cargo-generate-rpm/Cargo.toml
+      - shell: bash
+        if: ${{ matrix.platform.os != 'macos-latest' }}
+        run: sed -i '4d' cargo-generate-rpm/Cargo.toml
       - uses: dtolnay/rust-toolchain@stable
       - uses: PyO3/maturin-action@v1
         with:
