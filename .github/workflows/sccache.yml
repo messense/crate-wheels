@@ -51,8 +51,23 @@ jobs:
       - uses: actions/checkout@v3
         with:
           repository: mozilla/sccache
-          ref: v0.4.2
+          ref: main
           path: sccache
+      - name: Add pyproject.toml
+        shell: bash
+        run: |
+          tee sccache/pyproject.toml <<EOF
+          [build-system]
+          requires = ["maturin>=0.15,<0.16"]
+          build-backend = "maturin"
+
+          [project]
+          name = "sccache"
+          version = "0.4.2.post1"
+
+          [tool.maturin]
+          bindings = "bin"
+          EOF
       - uses: dtolnay/rust-toolchain@stable
       - uses: PyO3/maturin-action@v1
         with:
