@@ -6,9 +6,11 @@ on:
       - 'uniffi-bindgen-*'
     paths:
       - .github/workflows/uniffi-bindgen.yml
+      - uniffi-bindgen/**
   pull_request:
     paths:
       - .github/workflows/uniffi-bindgen.yml
+      - uniffi-bindgen/**
   workflow_dispatch:
 
 name: uniffi-bindgen
