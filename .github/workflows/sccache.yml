@@ -91,7 +91,7 @@ jobs:
           pip install maturin
           maturin upload -u __token__ --skip-existing *
       - name: Sigstore Sign
-        uses: sigstore/gh-action-sigstore-python@v0.0.11
+        uses: sigstore/gh-action-sigstore-python@v2.0.0
         with:
           inputs: ./*.whl
           upload-signing-artifacts: true
