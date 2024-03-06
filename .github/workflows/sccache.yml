@@ -58,6 +58,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: PyO3/maturin-action@v1
         env:
+          OPENSSL_STATIC: "1"
           # Workaround ring 0.17 build issue
           CFLAGS_aarch64_unknown_linux_gnu: "-D__ARM_ARCH=8"
         with:
@@ -66,6 +67,7 @@ jobs:
           manylinux: auto
           args: --release -o dist --features ${{ matrix.platform.features }}
           before-script-linux: ${{ matrix.platform.before-script || '' }}
+          docker-options: -e OPENSSL_STATIC
       - name: Upload wheel artifacts
         uses: actions/upload-artifact@v3
         with:
