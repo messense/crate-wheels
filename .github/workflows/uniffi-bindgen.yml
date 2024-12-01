@@ -56,6 +56,8 @@ jobs:
           - os: windows-latest
             target: x86_64
           - os: windows-latest
+            target: aarch64
+          - os: windows-latest
             target: i686
     steps:
       - uses: actions/checkout@v3
