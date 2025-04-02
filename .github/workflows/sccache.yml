@@ -3,7 +3,7 @@ on:
     branches:
       - main
     tags:
-      - 'sccache-*'
+      - "sccache-*"
     paths:
       - .github/workflows/sccache.yml
   pull_request:
@@ -70,9 +70,9 @@ jobs:
           args: --release -o dist --features ${{ matrix.platform.features }}
           before-script-linux: ${{ matrix.platform.before-script || '' }}
       - name: Upload wheel artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-${{ matrix.platform.os }}-${{ matrix.platform.target }}
           path: sccache/dist
 
   release-pypi:
@@ -88,10 +88,11 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: wheels
+          pattern: wheels-*
+          merge-multiple: true
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
       - name: Publish
         env:
           MATURIN_PASSWORD: ${{ secrets.MATURIN_PASSWORD }}
