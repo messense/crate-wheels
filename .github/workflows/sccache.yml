@@ -30,10 +30,10 @@ jobs:
             # dist-server only supports x86_64 Linux
             features: dist-server,reqwest/native-tls-vendored
             before-script: yum install -y perl-IPC-Cmd
-          # - os: ubuntu-latest
-          #   target: i686
-          #   features: reqwest/native-tls-vendored
-          #   before-script: yum install -y perl-IPC-Cmd
+          - os: ubuntu-latest
+            target: i686
+            features: reqwest/native-tls-vendored
+            before-script: yum install -y perl-IPC-Cmd
           - os: ubuntu-latest
             target: aarch64
             features: reqwest/native-tls-vendored
