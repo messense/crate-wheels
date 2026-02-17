@@ -53,7 +53,7 @@ jobs:
             target: i686
             features: reqwest/native-tls-vendored
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           repository: mozilla/sccache
           ref: v0.14.0
@@ -90,7 +90,7 @@ jobs:
         with:
           pattern: wheels-*
           merge-multiple: true
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Publish
@@ -101,12 +101,12 @@ jobs:
           pip install maturin
           maturin upload -u __token__ --skip-existing *
       - name: Sigstore Sign
-        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        uses: sigstore/gh-action-sigstore-python@v3.2.0
         with:
           inputs: ./*.whl
           upload-signing-artifacts: true
       - name: Release signing artifacts
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             *.whl
