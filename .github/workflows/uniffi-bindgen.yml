@@ -31,7 +31,7 @@ jobs:
           working-directory: uniffi-bindgen
           args: -o dist
       - name: Upload sdist artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: uniffi-bindgen/dist
@@ -70,7 +70,7 @@ jobs:
           args: -b bin --release -o dist
           sccache: 'true'
       - name: Upload wheel artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: uniffi-bindgen/dist
@@ -86,7 +86,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs: [build-wheel, build-sdist]
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: wheels
       - uses: actions/setup-python@v4
