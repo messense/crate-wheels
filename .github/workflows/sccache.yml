@@ -37,6 +37,9 @@ jobs:
           - os: ubuntu-latest
             target: aarch64
             features: reqwest/native-tls-vendored
+          - os: ubuntu-latest
+            target: riscv64
+            features: reqwest/native-tls-vendored
           - os: macos-latest
             target: x86_64
             features: reqwest/native-tls-vendored
